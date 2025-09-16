@@ -1,0 +1,36 @@
+node_modules
+env
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.joblib
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Local data
+*.csv
+*.xlsx
+
+# Logs
+*.log
+
+# Build / dist
+dist/
+build/
