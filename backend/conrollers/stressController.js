@@ -5,24 +5,35 @@ const __dirname = process.cwd();
 
 export const predictStress = (req, res) => {
 	try {
-		const features = req.body; // user input from frontend
+		console.log("📥 Received input from frontend:", req.body);
 
 		const pythonProcess = spawn("python", [
 			path.join(__dirname, "ml", "predict.py"),
-			JSON.stringify(features),
 		]);
 
+		// Send frontend data to Python via stdin
+		pythonProcess.stdin.write(JSON.stringify(req.body));
+		pythonProcess.stdin.end();
+
 		let result = "";
+
 		pythonProcess.stdout.on("data", (data) => {
+			console.log("🐍 Python Output:", data.toString());
 			result += data.toString();
 		});
 
 		pythonProcess.stderr.on("data", (data) => {
-			console.error("Python Error:", data.toString());
+			console.error("🐍 Python Error:", data.toString());
 		});
 
 		pythonProcess.on("close", () => {
-			res.json({ prediction: result.trim() });
+			try {
+				const parsed = JSON.parse(result);
+				res.json(parsed);
+			} catch (err) {
+				console.error("❌ JSON parse error:", err.message);
+				res.status(500).json({ error: "Invalid JSON from Python" });
+			}
 		});
 	} catch (err) {
 		console.error("Prediction Error:", err);
