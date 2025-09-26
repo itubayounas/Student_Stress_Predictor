@@ -6,18 +6,15 @@ import SelectField from "./SelectField";
 
 const StressForm = () => {
 	const [formData, setFormData] = useState({
-		Age: "",
-		Gender: "",
 		"Your Academic Stage": "",
-		"Study Environment": "",
-		"Are you suffering from any disease?": "",
-		"Do you do physical exercise daily?": "",
-		"Do you feel family pressure regarding your studies?": "",
-		"Do you have a proper diet?": "",
-		"What would you rate the academic  competition in your stude": "",
-		"Academic pressure from your home": "",
 		"Peer pressure": "",
+		"Academic pressure from your home": "",
+		"Study Environment": "",
 		"What coping strategy you use as a student?": "",
+		"Do you have any bad habits like smoking, drinking on a daily basis?":
+			"",
+		"What would you rate the academic  competition in your student life":
+			"",
 	});
 
 	const [prediction, setPrediction] = useState("");
@@ -39,7 +36,6 @@ const StressForm = () => {
 				"http://127.0.0.1:5000/api/predict",
 				formData
 			);
-			console.log(res.data.prediction)
 			setPrediction(res.data.prediction);
 		} catch (err) {
 			console.error("Prediction error:", err);
@@ -52,117 +48,69 @@ const StressForm = () => {
 	return (
 		<div className="min-h-screen w-screen flex items-center justify-center bg-gray-100 px-4">
 			<motion.div
-				className="w-full max-w-6xl bg-white shadow-2xl rounded-2xl p-10 flex flex-col justify-center items-center"
+				className="w-full max-w-4xl bg-white shadow-2xl rounded-2xl p-10 flex flex-col justify-center items-center"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
 			>
-				{/* Heading */}
 				<h2 className="text-3xl font-extrabold mb-8 text-center bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
 					🎓 Student Stress Predictor
 				</h2>
 
-				{/* Form */}
 				<form
 					onSubmit={handleSubmit}
 					className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-900 w-full"
 				>
-					{/* Row 1 */}
-					<InputField
-						label="Age"
-						name="Age"
-						type="number"
-						value={formData.Age}
-						onChange={handleChange}
-					/>
-					<SelectField
-						label="Gender"
-						name="Gender"
-						value={formData.Gender}
-						onChange={handleChange}
-						options={["Male", "Female", "Other"]}
-					/>
-
-					{/* Row 2 */}
+					{/* Your Academic Stage */}
 					<SelectField
 						label="Your Academic Stage"
 						name="Your Academic Stage"
 						value={formData["Your Academic Stage"]}
 						onChange={handleChange}
-						options={["School", "College", "University"]}
+						options={["undergraduate", "post-graduate", "school"]}
 					/>
+
+					{/* Study Environment */}
 					<SelectField
 						label="Study Environment"
 						name="Study Environment"
 						value={formData["Study Environment"]}
 						onChange={handleChange}
-						options={["Good", "Average", "Poor"]}
+						options={["Peaceful", "Noisy", "Average"]}
 					/>
 
-					{/* Row 3 */}
-					<SelectField
-						label="Do you do physical exercise daily?"
-						name="Do you do physical exercise daily?"
-						value={formData["Do you do physical exercise daily?"]}
-						onChange={handleChange}
-						options={["Yes", "No"]}
-					/>
-					<SelectField
-						label="Do you feel family pressure regarding your studies?"
-						name="Do you feel family pressure regarding your studies?"
-						value={
-							formData[
-								"Do you feel family pressure regarding your studies?"
-							]
-						}
-						onChange={handleChange}
-						options={["Yes", "No"]}
-					/>
-
-					{/* Row 4 */}
-					<SelectField
-						label="Do you have a proper diet?"
-						name="Do you have a proper diet?"
-						value={formData["Do you have a proper diet?"]}
-						onChange={handleChange}
-						options={["Yes", "No"]}
-					/>
-					<SelectField
-						label="Are you suffering from any disease?"
-						name="Are you suffering from any disease?"
-						value={formData["Are you suffering from any disease?"]}
-						onChange={handleChange}
-						options={["Yes", "No"]}
-					/>
-
-					{/* Row 5 */}
-					<SelectField
-						label="Academic pressure from your home"
-						name="Academic pressure from your home"
-						value={formData["Academic pressure from your home"]}
-						onChange={handleChange}
-						options={["High", "Moderate", "Low"]}
-					/>
+					{/* Peer pressure */}
 					<SelectField
 						label="Peer pressure"
 						name="Peer pressure"
 						value={formData["Peer pressure"]}
 						onChange={handleChange}
-						options={["High", "Moderate", "Low"]}
+						options={[1, 2, 3, 4, 5]} // numeric scale from dataset
 					/>
 
-					{/* Row 6 */}
+					{/* Academic pressure from your home */}
 					<SelectField
-						label="Academic competition in your studies"
-						name="What would you rate the academic  competition in your stude"
+						label="Academic pressure from your home"
+						name="Academic pressure from your home"
+						value={formData["Academic pressure from your home"]}
+						onChange={handleChange}
+						options={[1, 2, 3, 4, 5]} // numeric scale from dataset
+					/>
+
+					{/* Academic competition */}
+					<SelectField
+						label="Academic competition in your student life"
+						name="What would you rate the academic  competition in your student life"
 						value={
 							formData[
-								"What would you rate the academic  competition in your stude"
+								"What would you rate the academic  competition in your student life"
 							]
 						}
 						onChange={handleChange}
-						options={["High", "Moderate", "Low"]}
+						options={[1, 2, 3, 4, 5]} // numeric scale from dataset
 					/>
+
+					{/* Coping strategy */}
 					<SelectField
 						label="Coping strategy"
 						name="What coping strategy you use as a student?"
@@ -172,7 +120,25 @@ const StressForm = () => {
 							]
 						}
 						onChange={handleChange}
-						options={["Relaxation", "Time management", "Other"]}
+						options={[
+							"Analyze the situation and handle it intelligently",
+							"Social support (friends, family)",
+							"Emotional breakdown (crying a lot)",
+							"Other",
+						]}
+					/>
+
+					{/* Bad habits */}
+					<SelectField
+						label="Bad habits (smoking, drinking daily)"
+						name="Do you have any bad habits like smoking, drinking on a daily basis?"
+						value={
+							formData[
+								"Do you have any bad habits like smoking, drinking on a daily basis?"
+							]
+						}
+						onChange={handleChange}
+						options={["Yes", "No", "prefer not to say"]}
 					/>
 
 					{/* Submit Button */}
@@ -182,20 +148,7 @@ const StressForm = () => {
 							disabled={loading}
 							className="bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-indigo-700 transition transform hover:scale-105 w-1/2"
 						>
-							{loading ? (
-								<motion.div
-									className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto"
-									initial={{ rotate: 0 }}
-									animate={{ rotate: 360 }}
-									transition={{
-										repeat: Infinity,
-										duration: 1,
-										ease: "linear",
-									}}
-								/>
-							) : (
-								"Predict Stress"
-							)}
+							{loading ? "Loading..." : "Predict Stress"}
 						</button>
 					</div>
 				</form>
